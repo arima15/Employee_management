@@ -1,35 +1,83 @@
-import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
-import { EmployeeService } from './employee.service';
-import { CreateEmployeeDto } from './dto/create-employee.dto';
-import { UpdateEmployeeDto } from './dto/update-employee.dto';
-import { Employee } from './employee.entity';
+import { Request, Response } from "express";
+import { AppDataSource } from "../data-source";
+import { Employee } from "../entity/employee";
 
-@Controller('employees')
 export class EmployeeController {
-  constructor(private readonly employeeService: EmployeeService) {}
+    private employeeRepository = AppDataSource.getRepository(Employee);
 
-  @Post()
-  async create(@Body() createEmployeeDto: CreateEmployeeDto): Promise<Employee> {
-    return this.employeeService.create(createEmployeeDto);
-  }
+    // Get all employees
+    async getAllEmployees(req: Request, res: Response) {
+        try {
+            const employees = await this.employeeRepository.find({
+                relations: ["department"]
+            });
+            return res.json(employees);
+        } catch (error) {
+            return res.status(500).json({ message: "Error fetching employees", error });
+        }
+    }
 
-  @Get()
-  async findAll(): Promise<Employee[]> {
-    return this.employeeService.findAll();
-  }
+    // Get employee by ID
+    async getEmployeeById(req: Request, res: Response) {
+        try {
+            const id = parseInt(req.params.id);
+            const employee = await this.employeeRepository.findOne({
+                where: { id },
+                relations: ["department"]
+            });
 
-  @Get(':id')
-  async findOne(@Param('id') id: number): Promise<Employee> {
-    return this.employeeService.findOne(id);
-  }
+            if (!employee) {
+                return res.status(404).json({ message: "Employee not found" });
+            }
+            return res.json(employee);
+        } catch (error) {
+            return res.status(500).json({ message: "Error fetching employee", error });
+        }
+    }
 
-  @Put(':id')
-  async update(@Param('id') id: number, @Body() updateEmployeeDto: UpdateEmployeeDto): Promise<Employee> {
-    return this.employeeService.update(id, updateEmployeeDto);
-  }
+    // Create new employee
+    async createEmployee(req: Request, res: Response) {
+        try {
+            const employee = this.employeeRepository.create(req.body);
+            const result = await this.employeeRepository.save(employee);
+            return res.status(201).json(result);
+        } catch (error) {
+            return res.status(500).json({ message: "Error creating employee", error });
+        }
+    }
 
-  @Delete(':id')
-  async remove(@Param('id') id: number): Promise<void> {
-    return this.employeeService.remove(id);
-  }
+    // Update employee
+    async updateEmployee(req: Request, res: Response) {
+        try {
+            const id = parseInt(req.params.id);
+            let employee = await this.employeeRepository.findOneBy({ id });
+
+            if (!employee) {
+                return res.status(404).json({ message: "Employee not found" });
+            }
+
+            this.employeeRepository.merge(employee, req.body);
+            const result = await this.employeeRepository.save(employee);
+            return res.json(result);
+        } catch (error) {
+            return res.status(500).json({ message: "Error updating employee", error });
+        }
+    }
+
+    // Delete employee
+    async deleteEmployee(req: Request, res: Response) {
+        try {
+            const id = parseInt(req.params.id);
+            let employee = await this.employeeRepository.findOneBy({ id });
+
+            if (!employee) {
+                return res.status(404).json({ message: "Employee not found" });
+            }
+
+            await this.employeeRepository.remove(employee);
+            return res.status(204).send();
+        } catch (error) {
+            return res.status(500).json({ message: "Error deleting employee", error });
+        }
+    }
 }
