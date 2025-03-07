@@ -3,7 +3,8 @@ import * as bodyParser from "body-parser"
 import { Request, Response } from "express"
 import { AppDataSource } from "./data-source"
 import { Routes } from "./routes"
-import { User } from "./entity/User"
+import { Employee } from "./entity/employee"
+import { Department } from "./entity/Department"
 
 AppDataSource.initialize().then(async () => {
 
@@ -30,23 +31,27 @@ AppDataSource.initialize().then(async () => {
     // start express server
     app.listen(3000)
 
-    // insert new users for test
+    // insert new employees for test
     await AppDataSource.manager.save(
-        AppDataSource.manager.create(User, {
-            firstName: "Timber",
-            lastName: "Saw",
-            age: 27
+        AppDataSource.manager.create(Employee, {
+            name: "Timber Saw",
+            position: "Lumberjack",
+            salary: 50000,
+            hireDate: new Date(),
+            isActive: true
         })
     )
 
     await AppDataSource.manager.save(
-        AppDataSource.manager.create(User, {
-            firstName: "Phantom",
-            lastName: "Assassin",
-            age: 24
+        AppDataSource.manager.create(Employee, {
+            name: "Phantom Assassin",
+            position: "Assassin",
+            salary: 60000,
+            hireDate: new Date(),
+            isActive: true
         })
     )
 
-    console.log("Express server has started on port 3000. Open http://localhost:3000/users to see results")
+    console.log("Express server has started on port 3000. Open http://localhost:3000/employees to see results")
 
 }).catch(error => console.log(error))

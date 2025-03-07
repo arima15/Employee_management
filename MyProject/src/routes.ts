@@ -1,23 +1,28 @@
-import { UserController } from "./controller/UserController"
+import { EmployeeController } from "./controller/EmployeeController"
 
 export const Routes = [{
     method: "get",
-    route: "/users",
-    controller: UserController,
-    action: "all"
+    route: "/employees",
+    controller: EmployeeController,
+    action: "getAllEmployees"
 }, {
     method: "get",
-    route: "/users/:id",
-    controller: UserController,
-    action: "one"
+    route: "/employees/:id",
+    controller: EmployeeController,
+    action: "getEmployeeById"
 }, {
     method: "post",
-    route: "/users",
-    controller: UserController,
-    action: "save"
+    route: "/employees",
+    controller: EmployeeController,
+    action: "createEmployee"
+}, {
+    method: "put",
+    route: "/employees/:id",
+    controller: EmployeeController,
+    action: "updateEmployee"
 }, {
     method: "delete",
-    route: "/users/:id",
-    controller: UserController,
-    action: "remove"
+    route: "/employees/:id",
+    controller: EmployeeController,
+    action: "deleteEmployee"
 }]
