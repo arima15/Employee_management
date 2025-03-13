@@ -1,26 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn } from "typeorm"
-import { Department } from "./Department"
-
-@Entity()
 export class Employee {
-    @PrimaryGeneratedColumn()
-    id: number;
-
-    @Column()
+    id?: number;
     name: string;
-
-    @Column()
     position: string;
-
-    @Column({ nullable: true })
-    salary: number;
-
-    @ManyToOne(() => Department, department => department.employees)
-    department: Department;
-
-    @Column({ default: true })
-    isActive: boolean;
-
-    @CreateDateColumn()
-    hireDate: Date;
+    salary?: number;
+    departmentId?: number;
+    department?: any; // This will be populated manually when needed
+    isActive: boolean = true;
+    hireDate: Date = new Date();
 }

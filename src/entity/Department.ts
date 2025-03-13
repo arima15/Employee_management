@@ -1,14 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm"
-import { Employee } from "./employee"
-
-@Entity()
 export class Department {
-    @PrimaryGeneratedColumn()
-    id: number;
-
-    @Column()
+    id?: number;
     name: string;
-
-    @OneToMany(() => Employee, employee => employee.department)
-    employees: Employee[];
+    description?: string;
+    employees?: any[]; // This will be populated manually when needed
 }
