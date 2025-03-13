@@ -5,6 +5,14 @@ import { AppDataSource } from "./data-source"
 import { Routes } from "./routes"
 import { Employee } from "./entity/employee"
 import * as cors from "cors"
+import * as path from "path"
+import * as fs from "fs"
+
+// Create data directory if it doesn't exist
+const dataDir = path.join(__dirname, '../data');
+if (!fs.existsSync(dataDir)) {
+    fs.mkdirSync(dataDir, { recursive: true });
+}
 
 AppDataSource.initialize().then(async () => {
 
