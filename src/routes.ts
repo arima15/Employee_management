@@ -73,6 +73,11 @@ export const Routes = [{
     action: "updateEmployeeSalary"
 }, {
     method: "get",
+    route: "/tasks",
+    controller: EmployeeController,
+    action: "printTasks"
+}, {
+    method: "get",
     route: "/static-users",
     controller: (req, res) => {
         res.json(staticUsers);
