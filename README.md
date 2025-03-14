@@ -8,3 +8,4 @@ Steps to run this project:
 
 1. npm install cors @types/cors for cors installation.
 2. npm un mysql && npm i mysql2 for client does not support authentication .....
+hi
