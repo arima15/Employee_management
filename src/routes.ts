@@ -1,11 +1,13 @@
 
 
+
 import { EmployeeController } from "./controller/EmployeeController"
 import { DepartmentController } from "./controller/DepartmentController"
 import { Router } from "express"
 import { ILike } from "typeorm"
 import { ProductController } from "./controller/productController"
 
+Ybanez
 const router = Router()
 const employeeController = new EmployeeController()
 const productController = new ProductController()
@@ -80,20 +82,19 @@ export const Routes = [{
     route: "/employees/:id/salary",
     controller: EmployeeController,
     action: "updateEmployeeSalary"
-}];
-
-const staticUsers = [
-    { id: 1, name: "John Doe", email: "john.doe@example.com" },
-    { id: 2, name: "Jane Smith", email: "jane.smith@example.com" },
-    { id: 3, name: "Alice Johnson", email: "alice.johnson@example.com" }
-];
-
-// Route to get static users
-router.get("/static-users", (req, res) => {
-    res.json(staticUsers);
-});
+}, {
+    method: "get",
+    route: "/employees/:id/tenure",
+    controller: EmployeeController,
+    action: "getEmployeeTenure"
+}, {
+    method: "get",
+    route: "/tasks",
+    controller: EmployeeController,
+    action: "printTasks"
+}, ]
 
 // Assign employee to a project
-router.post("/:id/projects", employeeController.assignToProject);
+router.post("/:id/projects", employeeController.assignToProject)
 
-export default router;
+export default router
