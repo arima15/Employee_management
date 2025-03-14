@@ -221,4 +221,49 @@ export class EmployeeController {
         .json({ message: "Error updating employee salary", error });
     }
   }
+
+  // Calculate employee tenure
+  async getEmployeeTenure(req: Request, res: Response) {
+    try {
+      const id = parseInt(req.params.id);
+      
+      // Find employee
+      const employee = await this.employeeRepository.findOneBy({ id });
+
+      if (!employee) {
+        return res.status(404).json({ message: "Employee not found" });
+      }
+
+      // Calculate tenure in years
+      const hireDate = new Date(employee.hireDate);
+      const currentDate = new Date();
+      
+      // Calculate difference in milliseconds
+      const timeDiff = currentDate.getTime() - hireDate.getTime();
+      
+      // Convert to years (approximate)
+      const yearsDiff = timeDiff / (1000 * 3600 * 24 * 365.25);
+      
+      // Round to 2 decimal places for precision
+      const tenure = Math.round(yearsDiff * 100) / 100;
+
+      return res.json({
+        employeeId: employee.id,
+        name: employee.name,
+        hireDate: employee.hireDate,
+        tenure: tenure,
+        unit: "years"
+      });
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: "Error calculating employee tenure", error });
+    }
+  }
+
+  async printTasks(req: Request, res: Response) {
+    // Example implementation
+    const tasks = ["Smile", "Drink Water", "Take a shower"];
+    res.json(tasks);
+  }
 }
