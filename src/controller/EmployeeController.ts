@@ -181,4 +181,44 @@ export class EmployeeController {
         .json({ message: "Error searching employees", error });
     }
   }
+
+  // Update employee salary
+  async updateEmployeeSalary(req: Request, res: Response) {
+    try {
+      const id = parseInt(req.params.id);
+      const { salary, role } = req.body;
+
+      // Basic validation
+      if (salary === undefined || isNaN(Number(salary))) {
+        return res.status(400).json({ message: "Valid salary is required" });
+      }
+
+      // Authorization check - ensure only HR can update salaries
+      if (role !== 'HR') {
+        return res.status(403).json({ 
+          message: "Only HR personnel can update employee salaries" 
+        });
+      }
+
+      // Find employee
+      let employee = await this.employeeRepository.findOneBy({ id });
+
+      if (!employee) {
+        return res.status(404).json({ message: "Employee not found" });
+      }
+
+      // Update only the salary
+      employee.salary = Number(salary);
+      const result = await this.employeeRepository.save(employee);
+      
+      return res.json({
+        message: "Employee salary updated successfully",
+        employee: result
+      });
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: "Error updating employee salary", error });
+    }
+  }
 }

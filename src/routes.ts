@@ -66,6 +66,11 @@ export const Routes = [{
     route: "/employees/:id/projects",
     controller: EmployeeController,
     action: "assignToProject"
+}, {
+    method: "put",
+    route: "/employees/:id/salary",
+    controller: EmployeeController,
+    action: "updateEmployeeSalary"
 }]
 
 // Assign employee to a project
