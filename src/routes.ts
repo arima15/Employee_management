@@ -2,9 +2,11 @@ import { EmployeeController } from "./controller/EmployeeController"
 import { DepartmentController } from "./controller/DepartmentController"
 import { Router } from "express"
 import { ILike } from "typeorm"
+import { ProductController } from "./controller/productController"
 
 const router = Router()
 const employeeController = new EmployeeController()
+const productController = new ProductController()
 
 export const Routes = [{
     method: "get",
@@ -21,6 +23,11 @@ export const Routes = [{
     route: "/employees/:id",
     controller: EmployeeController,
     action: "getEmployeeById"
+}, {
+    method: "get",
+    route: "/products",
+    controller: ProductController,
+    action: "getAllProducts"
 }, {
     method: "post",
     route: "/employees",
