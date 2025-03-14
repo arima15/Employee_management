@@ -21,6 +21,12 @@ export const Routes = [{
     route: "/employees/:id",
     controller: EmployeeController,
     action: "getEmployeeById"
+}, 
+{
+    method: "get",
+    route: "/products",
+    controller: ProductController,
+    action: "getAllProducts"
 }, {
     method: "post",
     route: "/employees",
