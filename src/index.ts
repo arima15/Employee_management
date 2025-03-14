@@ -5,6 +5,7 @@ import { AppDataSource } from "./data-source"
 import { Routes } from "./routes"
 import { Employee } from "./entity/employee"
 import * as cors from "cors"
+import { Project } from "./entity/Project"
 
 AppDataSource.initialize().then(async () => {
 
@@ -57,6 +58,18 @@ AppDataSource.initialize().then(async () => {
             salary: 60000,
             hireDate: new Date(),
             isActive: true
+        })
+    )
+
+    await AppDataSource.manager.save(
+        AppDataSource.manager.create(Project, {
+            name: "Website Redesign"
+        })
+    )
+
+    await AppDataSource.manager.save(
+        AppDataSource.manager.create(Project, {
+            name: "Mobile App Development"
         })
     )
 
