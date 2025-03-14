@@ -1,11 +1,21 @@
 import { EmployeeController } from "./controller/EmployeeController"
 import { DepartmentController } from "./controller/DepartmentController"
+import { Router } from "express"
+import { ILike } from "typeorm"
+
+const router = Router()
+const employeeController = new EmployeeController()
 
 export const Routes = [{
     method: "get",
     route: "/employees",
     controller: EmployeeController,
     action: "getAllEmployees"
+}, {
+    method: "get",
+    route: "/employees/search",
+    controller: EmployeeController,
+    action: "searchEmployeesByName"
 }, {
     method: "get",
     route: "/employees/:id",
@@ -51,4 +61,14 @@ export const Routes = [{
     route: "/departments/:id",
     controller: DepartmentController,
     action: "deleteDepartment"
+}, {
+    method: "post",
+    route: "/employees/:id/projects",
+    controller: EmployeeController,
+    action: "assignToProject"
 }]
+
+// Assign employee to a project
+router.post("/:id/projects", employeeController.assignToProject)
+
+export default router
