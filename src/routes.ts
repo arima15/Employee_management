@@ -1,16 +1,10 @@
+import { EmployeeController } from "./controller/EmployeeController";
+import { DepartmentController } from "./controller/DepartmentController";
+import { Router } from "express";
+import { ProductController } from "./controller/productController"; // Corrected import statement
 
-
-
-import { EmployeeController } from "./controller/EmployeeController"
-import { DepartmentController } from "./controller/DepartmentController"
-import { Router } from "express"
-import { ILike } from "typeorm"
-import { ProductController } from "./controller/productController"
-
-Ybanez
-const router = Router()
-const employeeController = new EmployeeController()
-const productController = new ProductController()
+const router = Router();
+const employeeController = new EmployeeController();
 
 export const Routes = [{
     method: "get",
@@ -27,11 +21,6 @@ export const Routes = [{
     route: "/employees/:id",
     controller: EmployeeController,
     action: "getEmployeeById"
-}, {
-    method: "get",
-    route: "/products",
-    controller: ProductController,
-    action: "getAllProducts"
 }, {
     method: "post",
     route: "/employees",
@@ -84,17 +73,29 @@ export const Routes = [{
     action: "updateEmployeeSalary"
 }, {
     method: "get",
-    route: "/employees/:id/tenure",
-    controller: EmployeeController,
-    action: "getEmployeeTenure"
-}, {
-    method: "get",
-    route: "/tasks",
-    controller: EmployeeController,
-    action: "printTasks"
-}, ]
+    route: "/static-users",
+    controller: (req, res) => {
+        res.json(staticUsers);
+    }
+}];
 
-// Assign employee to a project
-router.post("/:id/projects", employeeController.assignToProject)
+const staticUsers = [
+    { id: 1, name: "Chrystal Mae", email: "john.doe@example.com" },
+    { id: 2, name: "Jane Smith", email: "jane.smith@example.com" },
+    { id: 3, name: "Alice Johnson", email: "alice.johnson@example.com" }
+];
 
-export default router
+// Apply routes to the router
+Routes.forEach(route => {
+    (router as any)[route.method](route.route, (req, res, next) => {
+        const result = (new (route.controller as any))[route.action](req, res, next);
+        if (result instanceof Promise) {
+            result.then(result => result !== null && result !== undefined ? res.send(result) : undefined)
+                .catch(err => next(err));
+        } else if (result !== null && result !== undefined) {
+            res.json(result);
+        }
+    });
+});
+
+export default router;
