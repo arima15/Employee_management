@@ -7,7 +7,7 @@ import { Router } from "express"
 import { ILike } from "typeorm"
 import { ProductController } from "./controller/productController"
 
-Ybanez
+
 const router = Router()
 const employeeController = new EmployeeController()
 const productController = new ProductController()
